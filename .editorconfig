@@ -10,7 +10,7 @@ charset = utf-8
 [*.md]
 trim_trailing_whitespace = false
 
-[*.{js,jsx,html}]
+[*.{ts,tsx,js,jsx,html}]
 indent_size = 2
 
 [{.eslintrc,.postcssrc}]

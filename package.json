@@ -2,8 +2,14 @@
   "name": "rocket-insurance",
   "version": "0.1.0",
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "axios": "^0.20.0",
+    "lottie-web-react": "^1.0.3",
     "react": "~16.13.1",
-    "react-dom": "~16.13.1"
+    "react-dom": "~16.13.1",
+    "react-hook-form": "^6.9.0",
+    "react-router-dom": "^5.2.0",
+    "react-transition-group": "^4.4.1"
   },
   "devDependencies": {
     "@babel/core": "7.9.0",
@@ -71,14 +77,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
-  },
-  "eslintConfig": {
-    "extends": [
-      "airbnb",
-      "airbnb/hooks",
-      "plugin:jest/recommended"
-    ]
+    "test": "node scripts/test.js",
+    "lint": "eslint './src/**/*.{js,ts,tsx}' --quiet --fix"
   },
   "browserslist": {
     "production": [
