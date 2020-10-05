@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+/* Up Transitions */
+.fade-enter.up {
+  opacity: 0;
+  transform: translateY(100%);
+}
+.fade-enter-active.up {
+  opacity: 1;
+  transform: translateY(0%);
+}
+.fade-exit.up {
+  opacity: 1;
+  transform: translateY(0%);
+}
+.fade-exit-active.up {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+/* Down Transitions */
+.fade-enter.down {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.fade-enter-active.down {
+  opacity: 1;
+  transform: translateY(0%);
+}
+.fade-exit.down {
+  opacity: 1;
+  transform: translateY(0%);
+}
+.fade-exit-active.down {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.fade-enter-active,
+.fade-exit-active {
+  transition: opacity 800ms, transform 800ms;
+}
