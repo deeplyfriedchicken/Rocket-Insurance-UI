@@ -44,19 +44,29 @@ const useStyles = makeStyles((theme: Theme) =>
 const Ratings: React.FC = () => {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
+  const [isTransitioning, setIsTransitioning] = React.useState(false);
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{ overflow: isTransitioning ? 'hidden' : undefined }}>
       <Container maxWidth="md">
         <SwitchTransition mode="out-in">
           <CSSTransition
             key={page}
+            timeout={800}
+            onEntered={(): void => {
+              console.log('entered');
+              setIsTransitioning(false);
+            }}
+            onExit={(): void => {
+              console.log('exit');
+              setIsTransitioning(true)
+            }}
             addEndListener={(node, done): void => {
               node.addEventListener("transitionend", done, false);
             }}
             classNames="fade"
           >
-            <div className={page === 0 ? "up" : "down"}>
+            <div className={page !== 0 ? "up" : "down"}>
               {page === 0 ? (
                 <>
                   <Heading text="Rocket Insurance" />
