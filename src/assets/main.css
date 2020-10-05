@@ -38,5 +38,5 @@
 
 .fade-enter-active,
 .fade-exit-active {
-  transition: opacity 500ms, transform 500ms;
+  transition: opacity 800ms, transform 800ms;
 }
