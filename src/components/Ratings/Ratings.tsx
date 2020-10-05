@@ -83,7 +83,7 @@ const Ratings: React.FC = () => {
                     Almost there!
                   </Typography>
                   <Typography className={classes.paragraph} variant="subtitle2">
-                    You&apos;ll be able to customize your deductible and asteroid collision after receiving your initial quote.
+                    You&apos;ll be able to customize your deductible and asteroid collision after receiving your initial quote!
                   </Typography>
                   <Grid className={classes.formContainer} container spacing={3}>
                     <Grid item sm={7}>
