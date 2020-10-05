@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '72px',
       color: theme.palette.primary.contrastText,
       marginBottom: '16px',
+      lineHeight: '72px',
     },
   }),
 );
