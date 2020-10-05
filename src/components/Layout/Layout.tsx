@@ -4,9 +4,9 @@ import Header from './Header';
 import Footer from './Footer';
 import RouteNode from '../RouteNode/RouteNode';
 
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'grid',
@@ -17,6 +17,9 @@ const useStyles = makeStyles(() =>
         "footer"
       `,
       minHeight: '100vh',
+      [theme.breakpoints.down('xs')]: {
+        gridTemplateRows: '48px auto 75px',
+      }
     },
     container: {
       gridArea: 'main',
