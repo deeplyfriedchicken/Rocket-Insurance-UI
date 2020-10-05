@@ -12,19 +12,24 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.primary.contrastText,
       marginBottom: '16px',
       lineHeight: '72px',
+      fontWeight: 900,
     },
   }),
 );
 
 interface Props {
   text: string;
+  className?: string;
 }
 
-const Heading: React.FC<Props> = ({ text }) => {
+const Heading: React.FC<Props> = ({ text, className }) => {
   const classes = useStyles();
 
   return (
-    <Typography className={classes.root} variant="h2">
+    <Typography
+      className={`${className} ${classes.root}`}
+      variant="h2"
+    >
       {text}
     </Typography>
   )
