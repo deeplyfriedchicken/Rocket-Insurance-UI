@@ -21,11 +21,7 @@ export const initialState: State = {
       postal: '',
     }
   },
-  quote: {
-    deductible: 0,
-    asteroidCollision: 0,
-  },
-  premium: 0,
+  quote: undefined,
   pageLoading: false,
   premiumLoading: false,
 };
