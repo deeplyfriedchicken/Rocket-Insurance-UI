@@ -12,7 +12,7 @@ interface Address {
   postal: string;
 }
 
-interface Ratings {
+export interface Ratings {
   firstName: string;
   lastName: string;
   address: Address;
