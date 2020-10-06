@@ -7,20 +7,20 @@ import { SwitchTransition, CSSTransition } from 'react-transition-group';
 import { Container, Typography } from '@material-ui/core';
 
 import Heading from '../Common/Heading';
+import ParticlesBackground from '../Common/ParticlesBackground';
 
 import NameForm from './NameForm/NameForm';
 import AddressForm from './AddressForm/AddressForm';
-
-import galaxyImage from '../../assets/galaxy.png';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       height: '100%',
-      background: `url(${galaxyImage}), ${theme.palette.primary.light}`,
+      background: `${theme.palette.primary.light}`,
       backgroundSize: '1000px',
       display: 'flex',
       alignItems: 'center',
+      position: 'relative',
     },
     subtitle: {
       color: theme.palette.primary.contrastText,
@@ -45,6 +45,7 @@ const RatingsPage: React.FC = () => {
 
   return (
     <div className={classes.root} style={{ overflow: isTransitioning ? 'hidden' : undefined }}>
+      <ParticlesBackground />
       <Container maxWidth="md">
         <SwitchTransition mode="out-in">
           <CSSTransition
