@@ -46,8 +46,11 @@ const useStyles = makeStyles((theme: Theme) => {
 const QuotePage: React.FC = () => {
   const history = useHistory();
   const [loading, setLoading] = React.useState(true);
-  const { state: { premiumLoading, ratings, quote, quote: { quoteId } }, dispatch } = React.useContext(Context);
   const classes = useStyles({ loading });
+
+  const { state: { premiumLoading, ratings, quote, quote: { quoteId } }, dispatch } = React.useContext(Context);
+  const { deductible, asteroid_collision: asteroidCollision } = quote.variable_options || {};
+  const { variable_selections: selections } = quote;
 
   const retrieveQuote = async (): Promise<Quote | undefined> => {
     const newQuote = await api.createQuote(ratings);
@@ -78,10 +81,6 @@ const QuotePage: React.FC = () => {
     if (ratings === initialState.ratings) return history.push('/');
     retrieveQuote();
   }, []);
-
-  const { deductible, asteroid_collision: asteroidCollision } = quote.variable_options || {};
-
-  const { variable_selections: selections } = quote;
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -128,7 +127,7 @@ const QuotePage: React.FC = () => {
                     <VariableSelect
                       name="asteroid-collision"
                       labelText="Asteroid Collision"
-                      value={selections.deductible}
+                      value={selections.asteroid_collision}
                       options={asteroidCollision?.values}
                       onChange={async (newCollision): Promise<void> => {
                         updateQuote({ deductible: selections.deductible, asteroid_collision: Number(newCollision) });
@@ -146,8 +145,8 @@ const QuotePage: React.FC = () => {
                       preserveAspectRatio: 'xMidYMid slice',
                     },
                   }}
-                  height={600}
-                  width={600}
+                  height={400}
+                  width={400}
                   speed={0.5}
                   isStopped={false}
                   isPaused={false}
