@@ -1,13 +1,17 @@
 import React from 'react';
 
-import galaxyImage from '../../assets/galaxy.png';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
 
 import { SwitchTransition, CSSTransition } from 'react-transition-group';
-import { Button, Container, Grid, TextField, Typography } from '@material-ui/core';
+import { Container, Typography } from '@material-ui/core';
 
 import Heading from '../Common/Heading';
 
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import NameForm from './NameForm/NameForm';
+import AddressForm from './AddressForm/AddressForm';
+
+import galaxyImage from '../../assets/galaxy.png';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,20 +33,13 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '18px',
       marginBottom: '16px',
     },
-    formContainer: {
-      marginBottom: '16px',
-    },
-    textField: {
-      backgroundColor: 'white',
-      '&:focused': {
-        backgroundColor: 'white',
-      }
-    },
   }),
 );
 
-const Ratings: React.FC = () => {
+const RatingsPage: React.FC = () => {
+  const history = useHistory();
   const classes = useStyles();
+  const nodeRef = React.useRef<HTMLDivElement>(null);
   const [page, setPage] = React.useState(0);
   const [isTransitioning, setIsTransitioning] = React.useState(false);
 
@@ -53,20 +50,12 @@ const Ratings: React.FC = () => {
           <CSSTransition
             key={page}
             timeout={800}
-            onEntered={(): void => {
-              console.log('entered');
-              setIsTransitioning(false);
-            }}
-            onExit={(): void => {
-              console.log('exit');
-              setIsTransitioning(true)
-            }}
-            addEndListener={(node, done): void => {
-              node.addEventListener("transitionend", done, false);
-            }}
+            nodeRef={nodeRef}
+            onEntered={(): void => setIsTransitioning(false)}
+            onExit={(): void => setIsTransitioning(true)}
             classNames="fade"
           >
-            <div className={page !== 0 ? "up" : "down"}>
+            <div ref={nodeRef} className={page !== 0 ? "up" : "down"}>
               {page === 0 ? (
                 <>
                   <Heading text="Rocket Insurance" />
@@ -76,15 +65,7 @@ const Ratings: React.FC = () => {
                   <Typography className={classes.paragraph} variant="subtitle2">
                     We&apos;ll just need a bit more information to get started.
                   </Typography>
-                  <Grid className={classes.formContainer} container spacing={3}>
-                    <Grid item sm={6}>
-                      <TextField className={classes.textField} fullWidth label="First Name" variant="filled" />
-                    </Grid>
-                    <Grid item sm={6}>
-                      <TextField className={classes.textField} fullWidth label="Last Name" variant="filled" />
-                    </Grid>
-                  </Grid>
-                  <Button color="secondary" variant="contained" onClick={(): void => setPage(1)}>NEXT</Button>
+                  <NameForm onSubmit={(): void => setPage(1)} />
                 </>
               ) : (
                 <>
@@ -95,24 +76,10 @@ const Ratings: React.FC = () => {
                   <Typography className={classes.paragraph} variant="subtitle2">
                     You&apos;ll be able to customize your deductible and asteroid collision after receiving your initial quote!
                   </Typography>
-                  <Grid className={classes.formContainer} container spacing={3}>
-                    <Grid item sm={7}>
-                      <TextField className={classes.textField} fullWidth label="Address" variant="filled" />
-                    </Grid>
-                    <Grid item sm={5}>
-                      <TextField className={classes.textField} fullWidth label="Apt #" variant="filled" />
-                    </Grid>
-                    <Grid item sm={4}>
-                      <TextField className={classes.textField} fullWidth label="City" variant="filled" />
-                    </Grid>
-                    <Grid item sm={4}>
-                      <TextField className={classes.textField} fullWidth label="Region" variant="filled" />
-                    </Grid>
-                    <Grid item sm={4}>
-                      <TextField className={classes.textField}fullWidth label="Postal" variant="filled" />
-                    </Grid>
-                  </Grid>
-                  <Button color="secondary" variant="contained" onClick={(): void => setPage(0)}>BACK</Button>
+                  <AddressForm
+                    onSubmit={(): void => history.push('/quote')}
+                    handleBack={(): void => setPage(0)}
+                  />
                 </>
               )}
             </div>
@@ -123,4 +90,4 @@ const Ratings: React.FC = () => {
   );
 };
 
-export default Ratings;
+export default RatingsPage;
