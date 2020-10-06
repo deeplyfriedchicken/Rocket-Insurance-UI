@@ -2,19 +2,21 @@
 import React from 'react';
 
 import { useHistory } from 'react-router-dom';
-import { Backdrop, Container, FormControl, InputLabel, MenuItem, Select, Slide, Typography, Grid } from '@material-ui/core';
-import Lottie from 'lottie-react-web'
-
-import ContainerLayout from '../Layout/ContainerLayout';
-
-import rocket from '../../assets/rocket-launch-transparent.json';
-import travelingRocket from '../../assets/rocket-thru-space.json';
-import rocketLoading from '../../assets/rocket-loading.json';
-
 import { makeStyles, Theme } from '@material-ui/core/styles';
+
+import { Container, Typography, Grid } from '@material-ui/core';
+import Lottie from 'lottie-react-web';
 
 import { initialState, Context } from '../../store/Store';
 import { UPDATE_QUOTE, UPDATE_PREMIUM_LOADING, VariableSelections, Quote } from '../../store/types';
+
+import ContainerLayout from '../Layout/ContainerLayout';
+import VariableSelect from './VariableSelect/VariableSelect';
+import Premium from './Premium/Premium';
+import LoadingRocket from './LoadingRocket/LoadingRocket';
+import LiftOffRocket from './LiftOffRocket/LiftOffRocket';
+
+import travelingRocket from '../../assets/rocket-thru-space.json';
 
 import api from '../../api';
 
@@ -28,50 +30,8 @@ const useStyles = makeStyles((theme: Theme) => {
       display: 'flex',
       alignItems: 'center',
     },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-    },
-    backdrop: {
-      zIndex: theme.zIndex.drawer + 1,
-      backgroundColor: '#09151d',
-      alignItems: 'baseline',
-    },
-    rocketBackdrop: {
-      zIndex: theme.zIndex.drawer + 1,
-      backgroundColor: 'rgba(33, 36, 70, 0.5)',
-      opacity: 0.5,
-      display: 'flex',
-      alignItems: 'center',
-      '& svg': {
-        zIndex: 2000,
-      }
-    },
-    lottieContainer: {
-      height: '100%',
-      width: '100%',
-      textAlign: 'center',
-    },
-    loadingText: {
-      fontFamily: spaceMono,
-      fontWeight: 600,
-      fontSize: '32px',
-    },
-    label: {
-      fontSize: '18px',
-      '&.Mui-focused': {
-        color: theme.palette.text.secondary,
-      },
-    },
-    select: {
-      fontFamily: spaceMono,
-      fontSize: '35px',
-      color: '#CB9E2D',
-    },
-    menu: {
-      '& .MuiMenu-paper': {
-        backgroundColor: theme.palette.primary.dark,
-      },
+    welcome: {
+      marginTop: '4rem',
     },
     selectContainer: {
       alignItems: 'center',
@@ -80,47 +40,30 @@ const useStyles = makeStyles((theme: Theme) => {
       fontSize: '36px',
       fontFamily: spaceMono,
     },
-    premium: {
-      fontFamily: spaceMono,
-      fontSize: '72px',
-      color: theme.palette.secondary.main,
-      '& > span': {
-        fontFamily: theme.typography.fontFamily,
-        color: theme.palette.text.primary,
-        fontSize: '36px',
-        fontWeight: 900,
-      },
-    },
-    premiumSubtitle: {
-      fontFamily: spaceMono,
-      fontSize: '48px',
-    },
-    welcome: {
-      marginTop: '4rem',
-    },
   };
 });
 
 const QuotePage: React.FC = () => {
   const history = useHistory();
   const [loading, setLoading] = React.useState(true);
-  const { state: { ratings, quote, quote: { quoteId }, premiumLoading }, dispatch } = React.useContext(Context);
+  const { state: { premiumLoading, ratings, quote, quote: { quoteId } }, dispatch } = React.useContext(Context);
   const classes = useStyles({ loading });
 
   const retrieveQuote = async (): Promise<Quote | undefined> => {
     const newQuote = await api.createQuote(ratings);
-    console.log(newQuote);
-    if (newQuote) {
-      dispatch({ type: UPDATE_QUOTE, payload: newQuote });
-    }
+    if (newQuote) dispatch({ type: UPDATE_QUOTE, payload: newQuote });
     return newQuote;
   }
 
   const updateQuote = async (selections: VariableSelections): Promise<Quote | undefined> => {
-    const data = { quoteId, policy_holder: quote.policy_holder, rating_address: quote.rating_address, variable_selections: selections };
     dispatch({ type: UPDATE_PREMIUM_LOADING, payload: true });
+    const data = {
+      quoteId,
+      policy_holder: quote.policy_holder,
+      rating_address: quote.rating_address,
+      variable_selections: selections
+    };
     const newQuote = await api.updateQuote(data);
-    console.log(newQuote);
     if (newQuote) {
       dispatch({ type: UPDATE_QUOTE, payload: newQuote });
       setTimeout(() => {
@@ -148,58 +91,8 @@ const QuotePage: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <Slide
-        direction="down"
-        in={loading}
-        unmountOnExit
-      >
-        <Backdrop
-          open
-          transitionDuration={{
-            appear: 0,
-            enter: 500,
-            exit: 500,
-          }}
-          className={classes.backdrop}
-        >
-          <div className={classes.lottieContainer}>
-            <Lottie
-              options={{
-                animationData: rocket,
-                rendererSettings: {
-                  preserveAspectRatio: 'xMidYMid slice',
-                },
-              }}
-              height={600}
-              width={600}
-              isStopped={false}
-              isPaused={false}
-            />
-            <Typography
-              className={classes.loadingText}
-              color="textPrimary"
-              variant="h1"
-            >
-                performing final checks...
-              </Typography>
-          </div>
-        </Backdrop>
-      </Slide>
-      <Backdrop className={classes.rocketBackdrop} open={premiumLoading}>
-        <Lottie
-          options={{
-            animationData: rocketLoading,
-            rendererSettings: {
-              preserveAspectRatio: 'xMidYMid slice',
-            },
-          }}
-          height={300}
-          width={300}
-          speed={1.5}
-          isStopped={false}
-          isPaused={false}
-        />
-      </Backdrop>
+      <LiftOffRocket loading={loading} />
+      <LoadingRocket loading={premiumLoading} />
       {!loading ? (
         <Container style={{ visibility: loading ? 'hidden' : 'inherit' }} maxWidth="md">
           <ContainerLayout
@@ -212,30 +105,15 @@ const QuotePage: React.FC = () => {
               <Grid item sm={9}>
                 <Grid container className={classes.selectContainer}>
                   <Grid item sm={4}>
-                    <FormControl variant="filled" className={classes.formControl}>
-                      <InputLabel className={classes.label} id="deductible-label">Deductible</InputLabel>
-                      <Select
-                        className={classes.select}
-                        labelId="deductible-label"
-                        id="deductible-label"
-                        value={selections.deductible}
-                        MenuProps={{
-                          className: classes.menu,
-                        }}
-                        onChange={async (e): Promise<Quote | undefined> => {
-                          return updateQuote({ deductible: Number(e.target.value), asteroid_collision: selections.asteroid_collision });
-                        }}
-                      >
-                        {(deductible?.values || []).map((d) => (
-                          <MenuItem
-                            key={d}
-                            value={d}
-                          >
-                            {`$${Number(d).toLocaleString('en')}`}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                    <VariableSelect
+                      name="deductible"
+                      labelText="Deductible"
+                      value={selections.deductible}
+                      options={deductible?.values}
+                      onChange={async (newDeductible): Promise<void> => {
+                        updateQuote({ deductible: Number(newDeductible), asteroid_collision: selections.asteroid_collision });
+                      }}
+                    />
                   </Grid>
                   <Grid item sm={2}>
                     <Typography
@@ -247,44 +125,18 @@ const QuotePage: React.FC = () => {
                     </Typography>
                   </Grid>
                   <Grid item sm={4}>
-                    <FormControl variant="filled" className={classes.formControl}>
-                      <InputLabel className={classes.label} id="asteroid-collision-label">Asteroid Collision</InputLabel>
-                      <Select
-                        labelId="asteroid-collision-label"
-                        id="asteroid-collision"
-                        value={selections.asteroid_collision}
-                        className={classes.select}
-                        MenuProps={{
-                          className: classes.menu,
-                        }}
-                        onChange={async (e): Promise<Quote | undefined> => {
-                          return updateQuote({ deductible: selections.deductible, asteroid_collision: Number(e.target.value) });
-                        }}
-                      >
-                        {(asteroidCollision?.values || []).map((collision) => (
-                          <MenuItem
-                            key={collision}
-                            value={collision}
-                          >
-                            {`$${Number(collision).toLocaleString('en')}`}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                    <VariableSelect
+                      name="asteroid-collision"
+                      labelText="Asteroid Collision"
+                      value={selections.deductible}
+                      options={asteroidCollision?.values}
+                      onChange={async (newCollision): Promise<void> => {
+                        updateQuote({ deductible: selections.deductible, asteroid_collision: Number(newCollision) });
+                      }}
+                    />
                   </Grid>
                 </Grid>
-                {!premiumLoading ? (
-                  <>
-                    <Typography variant="h2" className={classes.premium}>{`$${Number(quote?.premium).toLocaleString('en')}`} <span>/ yr</span></Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="textPrimary"
-                      className={classes.premiumSubtitle}
-                    >
-                      premium
-                    </Typography>
-                  </>
-                ) : null}
+                <Premium premium={quote?.premium} />
               </Grid>
               <Grid item sm={3}>
                 <Lottie
