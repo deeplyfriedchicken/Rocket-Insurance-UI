@@ -64,7 +64,6 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit }) => {
             handleChange={(e): void => dispatch({ type: UPDATE_RATINGS, payload: { ...ratings, address: { ...address, line2: e.target.value }} })}
             label="Apt #"
             name="line2"
-            rules={{ required: "This field is required" }}
           />
         </Grid>
         <Grid item sm={4}>
