@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import React from 'react';
 
 import Reducer from './Reducer';
@@ -21,7 +22,37 @@ export const initialState: State = {
       postal: '',
     }
   },
-  quote: undefined,
+  quote: {
+    quoteId: '',
+    rating_address: {
+      line_1: '',
+      line_2: '',
+      city: '',
+      region: '',
+      postal: '',
+    },
+    policy_holder: {
+      first_name: '',
+      last_name: '',
+    },
+    variable_options: {
+      deductible: {
+        title: '',
+        description: '',
+        values: [],
+      },
+      asteroid_collision: {
+        title: '',
+        description: '',
+        values: [],
+      },
+    },
+    variable_selections: {
+      deductible: 0,
+      asteroid_collision: 0,
+    },
+    premium: 0,
+  },
   pageLoading: false,
   premiumLoading: false,
 };

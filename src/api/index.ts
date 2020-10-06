@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import axios from 'axios';
 
-import { Quote, Ratings } from '../store/types';
+import { Quote, Ratings, UpdatedQuote } from '../store/types';
 
 const { REACT_APP_API_URL: baseURL } = process.env;
 
@@ -32,4 +32,20 @@ export const createQuote = async (ratings: Ratings): Promise<Quote | undefined> 
     console.error(err);
     return;
   }
+}
+
+export const updateQuote = async (quoteData: UpdatedQuote): Promise<Quote | undefined> => {
+  try {
+    const { data } = await instance.put(`/quotes/${quoteData.quoteId}`, { quote: quoteData });
+    return data?.quote;
+  }
+  catch(err) {
+    console.error(err);
+    return;
+  }
+}
+
+export default {
+  createQuote,
+  updateQuote,
 }

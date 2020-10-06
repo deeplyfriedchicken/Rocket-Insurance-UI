@@ -1,6 +1,5 @@
 export const UPDATE_RATINGS = 'UPDATE_RATINGS';
 export const UPDATE_QUOTE = 'UPDATE_QUOTE';
-export const UPDATE_PREMIUM = 'UPDATE_PREMIUM';
 export const UPDATE_PAGE_LOADING = 'UPDATE_PAGE_LOADING';
 export const UPDATE_PREMIUM_LOADING = 'UPDATE_PREMIUM_LOADING';
 
@@ -16,6 +15,11 @@ export interface Ratings {
   firstName: string;
   lastName: string;
   address: Address;
+}
+
+export interface VariableSelections {
+  deductible: number;
+  asteroid_collision: number;
 }
 
 export interface Quote {
@@ -43,17 +47,32 @@ export interface Quote {
       values: Array<number>;
     };
   };
+  variable_selections: VariableSelections;
+  premium: number;
+}
+
+export interface UpdatedQuote {
+  quoteId: string;
+  rating_address: {
+    line_1: string;
+    line_2: string;
+    city: string;
+    region: string;
+    postal: string;
+  };
+  policy_holder: {
+    first_name: string;
+    last_name: string;
+  };
   variable_selections: {
     deductible: number;
     asteroid_collision: number;
   };
-  premium: number;
 }
-
 
 export interface State {
   ratings: Ratings;
-  quote?: Quote;
+  quote: Quote;
   pageLoading: boolean;
   premiumLoading: boolean;
 }
@@ -65,7 +84,7 @@ interface UpdateRatingsAction {
 
 interface UpdateQuoteAction {
   type: typeof UPDATE_QUOTE;
-  payload?: Quote;
+  payload: Quote;
 }
 
 interface UpdatePageLoadingAction {
@@ -78,4 +97,5 @@ interface UpdatePremiumLoadingAction {
   payload: boolean;
 }
 
-export type ActionTypes = UpdateRatingsAction | UpdateQuoteAction | UpdatePageLoadingAction | UpdatePremiumLoadingAction;
+export type ActionTypes = UpdateRatingsAction | UpdateQuoteAction
+  | UpdatePageLoadingAction | UpdatePremiumLoadingAction;

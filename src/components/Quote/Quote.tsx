@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import React from 'react';
 
 import { useHistory } from 'react-router-dom';
@@ -7,12 +8,13 @@ import Lottie from 'lottie-react-web'
 import Heading from '../Common/Heading';
 import rocket from '../../assets/rocket-launch-transparent.json';
 import travelingRocket from '../../assets/rocket-thru-space.json';
+import rocketLoading from '../../assets/rocket-loading.json';
 
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { initialState, Context } from '../../store/Store';
-import { UPDATE_QUOTE, Ratings } from '../../store/types';
-import { createQuote } from '../../api';
+import { UPDATE_QUOTE, VariableSelections, Quote, UPDATE_PREMIUM_LOADING } from '../../store/types';
+import api from '../../api';
 
 const useStyles = makeStyles((theme: Theme) => {
   const spaceMono = '"Space Mono", Helvetica, sans-serif';
@@ -98,28 +100,43 @@ const useStyles = makeStyles((theme: Theme) => {
   };
 });
 
-const Quote: React.FC = () => {
+const QuotePage: React.FC = () => {
   const history = useHistory();
   const [loading, setLoading] = React.useState(true);
-  const [selectedDeductible, setSelectedDeductible] = React.useState<number | null>(null);
-  const [selectedCollision, setSelectedCollision] = React.useState<number | null>(null);
-  const { state: { ratings, quote }, dispatch } = React.useContext(Context);
+  const { state: { ratings, quote, quote: { quoteId }, premiumLoading }, dispatch } = React.useContext(Context);
   const classes = useStyles({ loading });
 
-  const retrieveQuote = async (data: Ratings): Promise<void> => {
-    const newQuote = await createQuote(data);
+  const retrieveQuote = async (): Promise<Quote | undefined> => {
+    const newQuote = await api.createQuote(ratings);
     console.log(newQuote);
-    dispatch({ type: UPDATE_QUOTE, payload: newQuote });
-    setSelectedDeductible(newQuote?.variable_options.deductible.values[0] || null)
-    setSelectedCollision(newQuote?.variable_options.asteroid_collision.values[0] || null)
+    if (newQuote) {
+      dispatch({ type: UPDATE_QUOTE, payload: newQuote });
+    }
+    return newQuote;
+  }
+
+  const updateQuote = async (selections: VariableSelections): Promise<Quote | undefined> => {
+    const data = { quoteId, policy_holder: quote.policy_holder, rating_address: quote.rating_address, variable_selections: selections };
+    dispatch({ type: UPDATE_PREMIUM_LOADING, payload: true });
+    const newQuote = await api.updateQuote(data);
+    console.log(newQuote);
+    if (newQuote) {
+      dispatch({ type: UPDATE_QUOTE, payload: newQuote });
+      setTimeout(() => {
+        dispatch({ type: UPDATE_PREMIUM_LOADING, payload: false });
+      }, 1000);
+    }
+    return newQuote;
   }
 
   React.useEffect(() => {
     if (ratings === initialState.ratings) return history.push('/');
-    retrieveQuote(ratings);
+    retrieveQuote();
   }, []);
 
-  const { deductible, asteroid_collision: asteroidCollision } = quote?.variable_options || {};
+  const { deductible, asteroid_collision: asteroidCollision } = quote.variable_options;
+
+  const { variable_selections: selections } = quote;
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -176,7 +193,7 @@ const Quote: React.FC = () => {
             Update the deductible and collision to get a new premium.
           </Typography>
           <Grid container spacing={3}>
-            <Grid item sm={8}>
+            <Grid item sm={9}>
               <Grid container className={classes.selectContainer}>
                 <Grid item sm={4}>
                   <FormControl variant="filled" className={classes.formControl}>
@@ -185,9 +202,12 @@ const Quote: React.FC = () => {
                       className={classes.select}
                       labelId="deductible-label"
                       id="deductible-label"
-                      value={selectedDeductible}
+                      value={selections.deductible}
                       MenuProps={{
                         className: classes.menu,
+                      }}
+                      onChange={async (e): Promise<Quote | undefined> => {
+                        return updateQuote({ deductible: Number(e.target.value), asteroid_collision: selections.asteroid_collision });
                       }}
                     >
                       {(deductible?.values || []).map((d) => (
@@ -216,10 +236,13 @@ const Quote: React.FC = () => {
                     <Select
                       labelId="asteroid-collision-label"
                       id="asteroid-collision"
-                      value={selectedCollision}
+                      value={selections.asteroid_collision}
                       className={classes.select}
                       MenuProps={{
                         className: classes.menu,
+                      }}
+                      onChange={async (e): Promise<Quote | undefined> => {
+                        return updateQuote({ deductible: selections.deductible, asteroid_collision: Number(e.target.value) });
                       }}
                     >
                       {(asteroidCollision?.values || []).map((collision) => (
@@ -234,16 +257,34 @@ const Quote: React.FC = () => {
                   </FormControl>
                 </Grid>
               </Grid>
-              <Typography variant="h2" className={classes.premium}>{`$${quote?.premium}`} <span>/ yr</span></Typography>
-              <Typography
-                variant="subtitle1"
-                color="textPrimary"
-                className={classes.premiumSubtitle}
-              >
-                premium
-              </Typography>
+              {!premiumLoading ? (
+                <>
+                  <Typography variant="h2" className={classes.premium}>{`$${quote?.premium}`} <span>/ yr</span></Typography>
+                  <Typography
+                    variant="subtitle1"
+                    color="textPrimary"
+                    className={classes.premiumSubtitle}
+                  >
+                    premium
+                  </Typography>
+                </>
+              ) : (
+                <Lottie
+                  options={{
+                    animationData: rocketLoading,
+                    rendererSettings: {
+                      preserveAspectRatio: 'xMidYMid slice',
+                    },
+                  }}
+                  height={300}
+                  width={300}
+                  speed={1.5}
+                  isStopped={false}
+                  isPaused={false}
+                />
+              )}
             </Grid>
-            <Grid item sm={4}>
+            <Grid item sm={3}>
               <Lottie
                 options={{
                   animationData: travelingRocket,
@@ -265,4 +306,4 @@ const Quote: React.FC = () => {
   );
 };
 
-export default Quote;
+export default QuotePage;
