@@ -12,11 +12,6 @@ const Reducer = (state: State, action: ActionTypes): State => {
         ...state,
         quote: action.payload,
       };
-    case 'UPDATE_PREMIUM':
-      return {
-        ...state,
-        premium: action.payload,
-      };
     case 'UPDATE_PAGE_LOADING':
       return {
         ...state,

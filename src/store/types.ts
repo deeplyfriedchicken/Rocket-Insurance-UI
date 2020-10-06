@@ -18,15 +18,42 @@ export interface Ratings {
   address: Address;
 }
 
-interface Quote {
-  deductible: number;
-  asteroidCollision: number;
+export interface Quote {
+  quoteId: string;
+  rating_address: {
+    line_1: string;
+    line_2: string;
+    city: string;
+    region: string;
+    postal: string;
+  };
+  policy_holder: {
+    first_name: string;
+    last_name: string;
+  };
+  variable_options: {
+    deductible: {
+      title: string;
+      description: string;
+      values: Array<number>;
+    };
+    asteroid_collision: {
+      title: string;
+      description: string;
+      values: Array<number>;
+    };
+  };
+  variable_selections: {
+    deductible: number;
+    asteroid_collision: number;
+  };
+  premium: number;
 }
+
 
 export interface State {
   ratings: Ratings;
-  quote: Quote;
-  premium: number;
+  quote?: Quote;
   pageLoading: boolean;
   premiumLoading: boolean;
 }
@@ -38,12 +65,7 @@ interface UpdateRatingsAction {
 
 interface UpdateQuoteAction {
   type: typeof UPDATE_QUOTE;
-  payload: Quote;
-}
-
-interface UpdatePremiumAction {
-  type: typeof UPDATE_PREMIUM;
-  payload: number;
+  payload?: Quote;
 }
 
 interface UpdatePageLoadingAction {
@@ -56,4 +78,4 @@ interface UpdatePremiumLoadingAction {
   payload: boolean;
 }
 
-export type ActionTypes = UpdateRatingsAction | UpdateQuoteAction | UpdatePremiumAction | UpdatePageLoadingAction | UpdatePremiumLoadingAction;
+export type ActionTypes = UpdateRatingsAction | UpdateQuoteAction | UpdatePageLoadingAction | UpdatePremiumLoadingAction;
