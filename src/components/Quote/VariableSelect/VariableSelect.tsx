@@ -20,9 +20,10 @@ const useStyles = makeStyles((theme: Theme) => {
       minWidth: 120,
     },
     label: {
-      fontSize: '18px',
+      fontSize: '20px',
+      color: theme.palette.text.primary,
       '&.Mui-focused': {
-        color: theme.palette.text.secondary,
+        color: theme.palette.text.primary,
       },
     },
     select: {
