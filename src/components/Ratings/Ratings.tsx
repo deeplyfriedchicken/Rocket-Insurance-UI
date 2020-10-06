@@ -8,6 +8,8 @@ import { Container } from '@material-ui/core';
 
 import ContainerLayout from '../Layout/ContainerLayout';
 import ParticlesBackground from '../Common/ParticlesBackground';
+import { Context } from '../../store/Store';
+import { RESET } from '../../store/types';
 
 import NameForm from './NameForm/NameForm';
 import AddressForm from './AddressForm/AddressForm';
@@ -31,6 +33,7 @@ const RatingsPage: React.FC = () => {
   const nodeRef = React.useRef<HTMLDivElement>(null);
   const [page, setPage] = React.useState(0);
   const [isTransitioning, setIsTransitioning] = React.useState(false);
+  const { dispatch } = React.useContext(Context);
 
   return (
     <div className={classes.root} style={{ overflow: isTransitioning ? 'hidden' : undefined }}>
@@ -63,6 +66,11 @@ const RatingsPage: React.FC = () => {
                     <AddressForm
                       onSubmit={(): void => history.push('/quote')}
                       handleBack={(): void => setPage(0)}
+                      handleReset={(): void => {
+                        dispatch({ type: RESET })
+                        history.push('/');
+                        setPage(0);
+                      }}
                     />
                   </ContainerLayout>
               )}

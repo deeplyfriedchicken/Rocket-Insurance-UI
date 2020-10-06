@@ -30,9 +30,10 @@ const useStyles = makeStyles(() =>
 interface Props {
   onSubmit(): void;
   handleBack(): void;
+  handleReset(): void;
 }
 
-const AddressForm: React.FC<Props> = ({ handleBack, onSubmit }) => {
+const AddressForm: React.FC<Props> = ({ handleBack, onSubmit, handleReset }) => {
   const { state: { ratings }, dispatch } = React.useContext(Context);
   const { address } = ratings;
   const { handleSubmit, errors, trigger, control } = useForm({ defaultValues: { ...address }, shouldUnregister: false });
@@ -116,7 +117,7 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit }) => {
             <Button color="secondary" variant="contained" type="button" onClick={handleBack}>BACK</Button>
           </Grid>
           <Grid className={`${classes.rightButtonContainer} ${classes.buttonContainer}`} item sm={10}>
-            <Button variant="contained" type="button">Reset</Button>
+            <Button variant="contained" type="button" onClick={handleReset}>Reset</Button>
             <Button color="primary" variant="contained" type="submit">Submit</Button>
           </Grid>
         </Grid>
