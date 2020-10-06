@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useHistory } from 'react-router-dom';
 import { Backdrop, Container, FormControl, InputLabel, MenuItem, Select, Slide, Typography, Grid } from '@material-ui/core';
 import Lottie from 'lottie-react-web'
 
@@ -8,6 +9,10 @@ import rocket from '../../assets/rocket-launch-transparent.json';
 import travelingRocket from '../../assets/rocket-thru-space.json';
 
 import { makeStyles, Theme } from '@material-ui/core/styles';
+
+import { initialState, Context } from '../../store/Store';
+import { UPDATE_QUOTE, Ratings } from '../../store/types';
+import { createQuote } from '../../api';
 
 const useStyles = makeStyles((theme: Theme) => {
   const spaceMono = '"Space Mono", Helvetica, sans-serif';
@@ -94,8 +99,27 @@ const useStyles = makeStyles((theme: Theme) => {
 });
 
 const Quote: React.FC = () => {
+  const history = useHistory();
   const [loading, setLoading] = React.useState(true);
+  const [selectedDeductible, setSelectedDeductible] = React.useState<number | null>(null);
+  const [selectedCollision, setSelectedCollision] = React.useState<number | null>(null);
+  const { state: { ratings, quote }, dispatch } = React.useContext(Context);
   const classes = useStyles({ loading });
+
+  const retrieveQuote = async (data: Ratings): Promise<void> => {
+    const newQuote = await createQuote(data);
+    console.log(newQuote);
+    dispatch({ type: UPDATE_QUOTE, payload: newQuote });
+    setSelectedDeductible(newQuote?.variable_options.deductible.values[0] || null)
+    setSelectedCollision(newQuote?.variable_options.asteroid_collision.values[0] || null)
+  }
+
+  React.useEffect(() => {
+    if (ratings === initialState.ratings) return history.push('/');
+    retrieveQuote(ratings);
+  }, []);
+
+  const { deductible, asteroid_collision: asteroidCollision } = quote?.variable_options || {};
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -142,92 +166,101 @@ const Quote: React.FC = () => {
           </div>
         </Backdrop>
       </Slide>
-      <Container style={{ visibility: loading ? 'hidden' : 'inherit' }} maxWidth="md">
-        <Heading className={classes.welcome} text="Welcome aboard, Kevin" />
-        <Typography className={classes.subtitle} variant="subtitle1">
-          You&apos;re on your way to better, customized insurance.
-        </Typography>
-        <Typography className={classes.paragraph} variant="subtitle2">
-          Update the deductible and collision to get a new premium.
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item sm={8}>
-            <Grid container className={classes.selectContainer}>
-              <Grid item sm={4}>
-                <FormControl variant="filled" className={classes.formControl}>
-                  <InputLabel className={classes.label} id="deductible-label">Deductible</InputLabel>
-                  <Select
-                    className={classes.select}
-                    labelId="deductible-label"
-                    id="deductible-label"
-                    value={10000}
-                    MenuProps={{
-                      className: classes.menu,
-                    }}
+      {!loading ? (
+        <Container style={{ visibility: loading ? 'hidden' : 'inherit' }} maxWidth="md">
+          <Heading className={classes.welcome} text="Welcome aboard, Kevin" />
+          <Typography className={classes.subtitle} variant="subtitle1">
+            You&apos;re on your way to better, customized insurance.
+          </Typography>
+          <Typography className={classes.paragraph} variant="subtitle2">
+            Update the deductible and collision to get a new premium.
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item sm={8}>
+              <Grid container className={classes.selectContainer}>
+                <Grid item sm={4}>
+                  <FormControl variant="filled" className={classes.formControl}>
+                    <InputLabel className={classes.label} id="deductible-label">Deductible</InputLabel>
+                    <Select
+                      className={classes.select}
+                      labelId="deductible-label"
+                      id="deductible-label"
+                      value={selectedDeductible}
+                      MenuProps={{
+                        className: classes.menu,
+                      }}
+                    >
+                      {(deductible?.values || []).map((d) => (
+                        <MenuItem
+                          key={d}
+                          value={d}
+                        >
+                          {d}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item sm={2}>
+                  <Typography
+                    className={classes.and}
+                    variant="subtitle1"
+                    color="textPrimary"
                   >
-                    <MenuItem value={10000}>10000</MenuItem>
-                    <MenuItem value={20000}>20000</MenuItem>
-                    <MenuItem value={30000}>30000</MenuItem>
-                  </Select>
-                </FormControl>
+                    and
+                  </Typography>
+                </Grid>
+                <Grid item sm={4}>
+                  <FormControl variant="filled" className={classes.formControl}>
+                    <InputLabel className={classes.label} id="asteroid-collision-label">Asteroid Collision</InputLabel>
+                    <Select
+                      labelId="asteroid-collision-label"
+                      id="asteroid-collision"
+                      value={selectedCollision}
+                      className={classes.select}
+                      MenuProps={{
+                        className: classes.menu,
+                      }}
+                    >
+                      {(asteroidCollision?.values || []).map((collision) => (
+                        <MenuItem
+                          key={collision}
+                          value={collision}
+                        >
+                          {collision}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
               </Grid>
-              <Grid item sm={2}>
-                <Typography
-                  className={classes.and}
-                  variant="subtitle1"
-                  color="textPrimary"
-                >
-                  and
-                </Typography>
-              </Grid>
-              <Grid item sm={4}>
-                <FormControl variant="filled" className={classes.formControl}>
-                  <InputLabel className={classes.label} id="asteroid-collision-label">Asteroid Collision</InputLabel>
-                  <Select
-                    labelId="asteroid-collision-label"
-                    id="asteroid-collision"
-                    value={60000}
-                    className={classes.select}
-                    MenuProps={{
-                      className: classes.menu,
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={60000}>60,000</MenuItem>
-                    <MenuItem value={70000}>70,000</MenuItem>
-                    <MenuItem value={10000}>10,000</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
+              <Typography variant="h2" className={classes.premium}>{`$${quote?.premium}`} <span>/ yr</span></Typography>
+              <Typography
+                variant="subtitle1"
+                color="textPrimary"
+                className={classes.premiumSubtitle}
+              >
+                premium
+              </Typography>
             </Grid>
-            <Typography variant="h2" className={classes.premium}>$6,000 <span>/ yr</span></Typography>
-            <Typography
-              variant="subtitle1"
-              color="textPrimary"
-              className={classes.premiumSubtitle}
-            >
-              premium
-            </Typography>
+            <Grid item sm={4}>
+              <Lottie
+                options={{
+                  animationData: travelingRocket,
+                  rendererSettings: {
+                    preserveAspectRatio: 'xMidYMid slice',
+                  },
+                }}
+                height={600}
+                width={600}
+                speed={0.5}
+                isStopped={false}
+                isPaused={false}
+              />
+            </Grid>
           </Grid>
-          <Grid item sm={4}>
-            <Lottie
-              options={{
-                animationData: travelingRocket,
-                rendererSettings: {
-                  preserveAspectRatio: 'xMidYMid slice',
-                },
-              }}
-              height={600}
-              width={600}
-              speed={0.5}
-              isStopped={false}
-              isPaused={false}
-            />
-          </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      ): null}
     </div>
   );
 };
