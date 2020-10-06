@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { AppBar, Toolbar, Typography } from '@material-ui/core'
+import { Link } from 'react-router-dom';
 
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
@@ -8,6 +9,10 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       gridArea: "header",
+      '& a': {
+        textDecoration: 'none',
+        color: 'inherit',
+      }
     }
   }),
 );
@@ -19,7 +24,9 @@ const Header: React.FC = () => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6">🚀 Rocket Insurance</Typography>
+            <Link to="/">
+              <Typography variant="h6">🚀 Rocket Insurance</Typography>
+            </Link>
         </Toolbar>
       </AppBar>
     </div>
