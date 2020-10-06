@@ -5,7 +5,8 @@ import { useHistory } from 'react-router-dom';
 import { Backdrop, Container, FormControl, InputLabel, MenuItem, Select, Slide, Typography, Grid } from '@material-ui/core';
 import Lottie from 'lottie-react-web'
 
-import Heading from '../Common/Heading';
+import ContainerLayout from '../Layout/ContainerLayout';
+
 import rocket from '../../assets/rocket-launch-transparent.json';
 import travelingRocket from '../../assets/rocket-thru-space.json';
 import rocketLoading from '../../assets/rocket-loading.json';
@@ -13,7 +14,8 @@ import rocketLoading from '../../assets/rocket-loading.json';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { initialState, Context } from '../../store/Store';
-import { UPDATE_QUOTE, VariableSelections, Quote, UPDATE_PREMIUM_LOADING } from '../../store/types';
+import { UPDATE_QUOTE, UPDATE_PREMIUM_LOADING, VariableSelections, Quote } from '../../store/types';
+
 import api from '../../api';
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -54,17 +56,6 @@ const useStyles = makeStyles((theme: Theme) => {
       fontFamily: spaceMono,
       fontWeight: 600,
       fontSize: '32px',
-    },
-    subtitle: {
-      color: theme.palette.primary.contrastText,
-      fontWeight: 500,
-      fontSize: '32px',
-      marginBottom: '16px',
-    },
-    paragraph: {
-      color: theme.palette.primary.contrastText,
-      fontSize: '18px',
-      marginBottom: '16px',
     },
     label: {
       fontSize: '18px',
@@ -211,107 +202,107 @@ const QuotePage: React.FC = () => {
       </Backdrop>
       {!loading ? (
         <Container style={{ visibility: loading ? 'hidden' : 'inherit' }} maxWidth="md">
-          <Heading className={classes.welcome} text="Welcome aboard, Kevin" />
-          <Typography className={classes.subtitle} variant="subtitle1">
-            You&apos;re on your way to better, customized insurance.
-          </Typography>
-          <Typography className={classes.paragraph} variant="subtitle2">
-            Update the deductible and collision to get a new premium.
-          </Typography>
-          <Grid container spacing={3}>
-            <Grid item sm={9}>
-              <Grid container className={classes.selectContainer}>
-                <Grid item sm={4}>
-                  <FormControl variant="filled" className={classes.formControl}>
-                    <InputLabel className={classes.label} id="deductible-label">Deductible</InputLabel>
-                    <Select
-                      className={classes.select}
-                      labelId="deductible-label"
-                      id="deductible-label"
-                      value={selections.deductible}
-                      MenuProps={{
-                        className: classes.menu,
-                      }}
-                      onChange={async (e): Promise<Quote | undefined> => {
-                        return updateQuote({ deductible: Number(e.target.value), asteroid_collision: selections.asteroid_collision });
-                      }}
+          <ContainerLayout
+            className={classes.welcome}
+            heading={`Welcome aboard, ${ratings.firstName}`}
+            subtitle="You&apos;re on your way to better, customized insurance."
+            paragraph="Update the deductible and collision to get a new premium."
+          >
+            <Grid container spacing={3}>
+              <Grid item sm={9}>
+                <Grid container className={classes.selectContainer}>
+                  <Grid item sm={4}>
+                    <FormControl variant="filled" className={classes.formControl}>
+                      <InputLabel className={classes.label} id="deductible-label">Deductible</InputLabel>
+                      <Select
+                        className={classes.select}
+                        labelId="deductible-label"
+                        id="deductible-label"
+                        value={selections.deductible}
+                        MenuProps={{
+                          className: classes.menu,
+                        }}
+                        onChange={async (e): Promise<Quote | undefined> => {
+                          return updateQuote({ deductible: Number(e.target.value), asteroid_collision: selections.asteroid_collision });
+                        }}
+                      >
+                        {(deductible?.values || []).map((d) => (
+                          <MenuItem
+                            key={d}
+                            value={d}
+                          >
+                            {`$${Number(d).toLocaleString('en')}`}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item sm={2}>
+                    <Typography
+                      className={classes.and}
+                      variant="subtitle1"
+                      color="textPrimary"
                     >
-                      {(deductible?.values || []).map((d) => (
-                        <MenuItem
-                          key={d}
-                          value={d}
-                        >
-                          {`$${Number(d).toLocaleString('en')}`}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                      and
+                    </Typography>
+                  </Grid>
+                  <Grid item sm={4}>
+                    <FormControl variant="filled" className={classes.formControl}>
+                      <InputLabel className={classes.label} id="asteroid-collision-label">Asteroid Collision</InputLabel>
+                      <Select
+                        labelId="asteroid-collision-label"
+                        id="asteroid-collision"
+                        value={selections.asteroid_collision}
+                        className={classes.select}
+                        MenuProps={{
+                          className: classes.menu,
+                        }}
+                        onChange={async (e): Promise<Quote | undefined> => {
+                          return updateQuote({ deductible: selections.deductible, asteroid_collision: Number(e.target.value) });
+                        }}
+                      >
+                        {(asteroidCollision?.values || []).map((collision) => (
+                          <MenuItem
+                            key={collision}
+                            value={collision}
+                          >
+                            {`$${Number(collision).toLocaleString('en')}`}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
                 </Grid>
-                <Grid item sm={2}>
-                  <Typography
-                    className={classes.and}
-                    variant="subtitle1"
-                    color="textPrimary"
-                  >
-                    and
-                  </Typography>
-                </Grid>
-                <Grid item sm={4}>
-                  <FormControl variant="filled" className={classes.formControl}>
-                    <InputLabel className={classes.label} id="asteroid-collision-label">Asteroid Collision</InputLabel>
-                    <Select
-                      labelId="asteroid-collision-label"
-                      id="asteroid-collision"
-                      value={selections.asteroid_collision}
-                      className={classes.select}
-                      MenuProps={{
-                        className: classes.menu,
-                      }}
-                      onChange={async (e): Promise<Quote | undefined> => {
-                        return updateQuote({ deductible: selections.deductible, asteroid_collision: Number(e.target.value) });
-                      }}
+                {!premiumLoading ? (
+                  <>
+                    <Typography variant="h2" className={classes.premium}>{`$${Number(quote?.premium).toLocaleString('en')}`} <span>/ yr</span></Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="textPrimary"
+                      className={classes.premiumSubtitle}
                     >
-                      {(asteroidCollision?.values || []).map((collision) => (
-                        <MenuItem
-                          key={collision}
-                          value={collision}
-                        >
-                          {`$${Number(collision).toLocaleString('en')}`}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
+                      premium
+                    </Typography>
+                  </>
+                ) : null}
               </Grid>
-              {!premiumLoading ? (
-                <>
-                  <Typography variant="h2" className={classes.premium}>{`$${Number(quote?.premium).toLocaleString('en')}`} <span>/ yr</span></Typography>
-                  <Typography
-                    variant="subtitle1"
-                    color="textPrimary"
-                    className={classes.premiumSubtitle}
-                  >
-                    premium
-                  </Typography>
-                </>
-              ) : null}
+              <Grid item sm={3}>
+                <Lottie
+                  options={{
+                    animationData: travelingRocket,
+                    rendererSettings: {
+                      preserveAspectRatio: 'xMidYMid slice',
+                    },
+                  }}
+                  height={600}
+                  width={600}
+                  speed={0.5}
+                  isStopped={false}
+                  isPaused={false}
+                />
+              </Grid>
             </Grid>
-            <Grid item sm={3}>
-              <Lottie
-                options={{
-                  animationData: travelingRocket,
-                  rendererSettings: {
-                    preserveAspectRatio: 'xMidYMid slice',
-                  },
-                }}
-                height={600}
-                width={600}
-                speed={0.5}
-                isStopped={false}
-                isPaused={false}
-              />
-            </Grid>
-          </Grid>
+          </ContainerLayout>
         </Container>
       ): null}
     </div>

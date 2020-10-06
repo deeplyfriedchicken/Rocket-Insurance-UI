@@ -4,9 +4,9 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 
 import { SwitchTransition, CSSTransition } from 'react-transition-group';
-import { Container, Typography } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 
-import Heading from '../Common/Heading';
+import ContainerLayout from '../Layout/ContainerLayout';
 import ParticlesBackground from '../Common/ParticlesBackground';
 
 import NameForm from './NameForm/NameForm';
@@ -21,17 +21,6 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       position: 'relative',
-    },
-    subtitle: {
-      color: theme.palette.primary.contrastText,
-      fontWeight: 500,
-      fontSize: '32px',
-      marginBottom: '16px',
-    },
-    paragraph: {
-      color: theme.palette.primary.contrastText,
-      fontSize: '18px',
-      marginBottom: '16px',
     },
   }),
 );
@@ -58,30 +47,24 @@ const RatingsPage: React.FC = () => {
           >
             <div ref={nodeRef} className={page !== 0 ? "up" : "down"}>
               {page === 0 ? (
-                <>
-                  <Heading text="Rocket Insurance" />
-                  <Typography className={classes.subtitle} variant="subtitle1">
-                    Get interstellar insurance prices in minutes.
-                  </Typography>
-                  <Typography className={classes.paragraph} variant="subtitle2">
-                    We&apos;ll just need a bit more information to get started.
-                  </Typography>
+                <ContainerLayout
+                  heading="Rocket Insurance"
+                  subtitle="Get Interstellar insurance prices in minutes"
+                  paragraph="We&apos;ll just need a bit more information to get started!"
+                >
                   <NameForm onSubmit={(): void => setPage(1)} />
-                </>
+                </ContainerLayout>
               ) : (
-                <>
-                  <Heading text="Get Your Boarding Pass:" />
-                  <Typography className={classes.subtitle} variant="subtitle1">
-                    Almost there!
-                  </Typography>
-                  <Typography className={classes.paragraph} variant="subtitle2">
-                    You&apos;ll be able to customize your deductible and asteroid collision after receiving your initial quote!
-                  </Typography>
-                  <AddressForm
-                    onSubmit={(): void => history.push('/quote')}
-                    handleBack={(): void => setPage(0)}
-                  />
-                </>
+                  <ContainerLayout
+                    heading="Get Your Boarding Pass:"
+                    subtitle="Almost there!"
+                    paragraph="You&apos;ll be able to customize your deductible and asteroid collision after receiving your initial quote!"
+                  >
+                    <AddressForm
+                      onSubmit={(): void => history.push('/quote')}
+                      handleBack={(): void => setPage(0)}
+                    />
+                  </ContainerLayout>
               )}
             </div>
           </CSSTransition>
