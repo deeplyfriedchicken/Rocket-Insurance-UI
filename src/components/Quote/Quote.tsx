@@ -35,6 +35,13 @@ const useStyles = makeStyles((theme: Theme) => {
       backgroundColor: '#09151d',
       alignItems: 'baseline',
     },
+    rocketBackdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      backgroundColor: 'rgba(33, 36, 70, 0.5)',
+      opacity: 0.5,
+      display: 'flex',
+      alignItems: 'center',
+    },
     lottieContainer: {
       height: '100%',
       width: '100%',
@@ -116,6 +123,7 @@ const QuotePage: React.FC = () => {
   }
 
   const updateQuote = async (selections: VariableSelections): Promise<Quote | undefined> => {
+    console.log(quote);
     const data = { quoteId, policy_holder: quote.policy_holder, rating_address: quote.rating_address, variable_selections: selections };
     dispatch({ type: UPDATE_PREMIUM_LOADING, payload: true });
     const newQuote = await api.updateQuote(data);
@@ -124,17 +132,18 @@ const QuotePage: React.FC = () => {
       dispatch({ type: UPDATE_QUOTE, payload: newQuote });
       setTimeout(() => {
         dispatch({ type: UPDATE_PREMIUM_LOADING, payload: false });
-      }, 1000);
+      }, 1500);
     }
     return newQuote;
   }
 
   React.useEffect(() => {
+    // redirect if form not filled out
     if (ratings === initialState.ratings) return history.push('/');
     retrieveQuote();
   }, []);
 
-  const { deductible, asteroid_collision: asteroidCollision } = quote.variable_options;
+  const { deductible, asteroid_collision: asteroidCollision } = quote.variable_options || {};
 
   const { variable_selections: selections } = quote;
 
@@ -183,6 +192,22 @@ const QuotePage: React.FC = () => {
           </div>
         </Backdrop>
       </Slide>
+      <Backdrop className={classes.rocketBackdrop} open={premiumLoading}>
+        <Lottie
+          style={{ zIndex: 2000 }}
+          options={{
+            animationData: rocketLoading,
+            rendererSettings: {
+              preserveAspectRatio: 'xMidYMid slice',
+            },
+          }}
+          height={300}
+          width={300}
+          speed={1.5}
+          isStopped={false}
+          isPaused={false}
+        />
+      </Backdrop>
       {!loading ? (
         <Container style={{ visibility: loading ? 'hidden' : 'inherit' }} maxWidth="md">
           <Heading className={classes.welcome} text="Welcome aboard, Kevin" />
@@ -268,21 +293,7 @@ const QuotePage: React.FC = () => {
                     premium
                   </Typography>
                 </>
-              ) : (
-                <Lottie
-                  options={{
-                    animationData: rocketLoading,
-                    rendererSettings: {
-                      preserveAspectRatio: 'xMidYMid slice',
-                    },
-                  }}
-                  height={300}
-                  width={300}
-                  speed={1.5}
-                  isStopped={false}
-                  isPaused={false}
-                />
-              )}
+              ) : null}
             </Grid>
             <Grid item sm={3}>
               <Lottie
