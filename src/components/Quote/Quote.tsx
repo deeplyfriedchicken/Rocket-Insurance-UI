@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme: Theme) => {
       opacity: 0.5,
       display: 'flex',
       alignItems: 'center',
+      '& svg': {
+        zIndex: 2000,
+      }
     },
     lottieContainer: {
       height: '100%',
@@ -88,7 +91,7 @@ const useStyles = makeStyles((theme: Theme) => {
     },
     premium: {
       fontFamily: spaceMono,
-      fontSize: '96px',
+      fontSize: '72px',
       color: theme.palette.secondary.main,
       '& > span': {
         fontFamily: theme.typography.fontFamily,
@@ -123,7 +126,6 @@ const QuotePage: React.FC = () => {
   }
 
   const updateQuote = async (selections: VariableSelections): Promise<Quote | undefined> => {
-    console.log(quote);
     const data = { quoteId, policy_holder: quote.policy_holder, rating_address: quote.rating_address, variable_selections: selections };
     dispatch({ type: UPDATE_PREMIUM_LOADING, payload: true });
     const newQuote = await api.updateQuote(data);
@@ -194,7 +196,6 @@ const QuotePage: React.FC = () => {
       </Slide>
       <Backdrop className={classes.rocketBackdrop} open={premiumLoading}>
         <Lottie
-          style={{ zIndex: 2000 }}
           options={{
             animationData: rocketLoading,
             rendererSettings: {
@@ -240,7 +241,7 @@ const QuotePage: React.FC = () => {
                           key={d}
                           value={d}
                         >
-                          {d}
+                          {`$${Number(d).toLocaleString('en')}`}
                         </MenuItem>
                       ))}
                     </Select>
@@ -275,7 +276,7 @@ const QuotePage: React.FC = () => {
                           key={collision}
                           value={collision}
                         >
-                          {collision}
+                          {`$${Number(collision).toLocaleString('en')}`}
                         </MenuItem>
                       ))}
                     </Select>
@@ -284,7 +285,7 @@ const QuotePage: React.FC = () => {
               </Grid>
               {!premiumLoading ? (
                 <>
-                  <Typography variant="h2" className={classes.premium}>{`$${quote?.premium}`} <span>/ yr</span></Typography>
+                  <Typography variant="h2" className={classes.premium}>{`$${Number(quote?.premium).toLocaleString('en')}`} <span>/ yr</span></Typography>
                   <Typography
                     variant="subtitle1"
                     color="textPrimary"
