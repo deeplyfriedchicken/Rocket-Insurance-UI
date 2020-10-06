@@ -12,12 +12,15 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 interface Props {
   control: Control<Record<string, any>>;
+  trigger?(payload?: string | string[]): Promise<boolean>;
   defaultValue: any;
   label: string;
   name: string;
   rules?: Record<string, any>;
   handleChange?(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void | undefined;
   error?: Record<string, any>;
+  autoFocus?: boolean;
+  inputRef?: React.Ref<HTMLDivElement>;
 }
 
 const useStyles = makeStyles(() =>
@@ -39,8 +42,13 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const ControlledTextInput: React.FC<Props> = ({ handleChange, label, control, name, defaultValue, rules, error }) => {
+const ControlledTextInput: React.FC<Props> = ({
+    handleChange, trigger,
+    autoFocus, label, control,
+    inputRef, name, defaultValue, rules, error
+  }) => {
   const classes = useStyles();
+  const [hasTriggered, setHasTriggered] = React.useState(false);
 
   return (
     <Controller
@@ -48,10 +56,12 @@ const ControlledTextInput: React.FC<Props> = ({ handleChange, label, control, na
       name={name}
       defaultValue={defaultValue}
       rules={rules}
-      render={({ onChange, name, value }): React.ReactElement => (
+      render={({ onChange, onBlur, name, value }): React.ReactElement => (
         <TextField
           fullWidth
           name={name}
+          autoFocus={autoFocus}
+          inputRef={inputRef}
           variant="filled"
           label={label}
           error={!!error}
@@ -61,10 +71,17 @@ const ControlledTextInput: React.FC<Props> = ({ handleChange, label, control, na
             if (handleChange) handleChange(e);
             onChange(e)
           }}
+          onBlur={(): void => {
+            if (trigger) {
+              trigger(name);
+              setHasTriggered(true);
+            }
+            onBlur();
+          }}
           value={value}
           InputProps={{
             endAdornment: (
-              value && !error ? (
+              (!trigger || hasTriggered) && value && !error ? (
                 <InputAdornment position="end">
                     <CheckCircleIcon color="secondary" />
                 </InputAdornment>

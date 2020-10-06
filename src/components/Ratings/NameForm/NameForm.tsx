@@ -50,7 +50,7 @@ const NameForm: React.FC<Props> = ({ onSubmit }) => {
   const classes = useStyles();
   const { state: { ratings }, dispatch } = React.useContext(Context);
   const { firstName, lastName } = ratings;
-  const { handleSubmit, errors, control } = useForm({ defaultValues: { firstName, lastName }, shouldUnregister: false });
+  const { handleSubmit, errors, trigger, control } = useForm({ defaultValues: { firstName, lastName }, shouldUnregister: false });
 
   return (
     <form
@@ -61,7 +61,9 @@ const NameForm: React.FC<Props> = ({ onSubmit }) => {
       <Grid className={classes.formContainer} container spacing={3}>
         <Grid item sm={6}>
           <ControlledTextInput
+            autoFocus
             control={control}
+            trigger={trigger}
             defaultValue={firstName}
             error={errors?.firstName}
             handleChange={(e): void => dispatch({ type: UPDATE_RATINGS, payload: { ...ratings, firstName: e.target.value }})}
@@ -73,6 +75,7 @@ const NameForm: React.FC<Props> = ({ onSubmit }) => {
         <Grid item sm={6}>
           <ControlledTextInput
             control={control}
+            trigger={trigger}
             defaultValue={lastName}
             error={errors?.lastName}
             handleChange={(e): void => dispatch({ type: UPDATE_RATINGS, payload: { ...ratings, lastName: e.target.value }})}

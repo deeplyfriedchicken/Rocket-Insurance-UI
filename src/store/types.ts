@@ -2,6 +2,7 @@ export const UPDATE_RATINGS = 'UPDATE_RATINGS';
 export const UPDATE_QUOTE = 'UPDATE_QUOTE';
 export const UPDATE_PAGE_LOADING = 'UPDATE_PAGE_LOADING';
 export const UPDATE_PREMIUM_LOADING = 'UPDATE_PREMIUM_LOADING';
+export const RESET = 'RESET';
 
 interface Address {
   line1: string;
@@ -77,6 +78,10 @@ export interface State {
   premiumLoading: boolean;
 }
 
+interface Reset {
+  type: typeof RESET;
+}
+
 interface UpdateRatingsAction {
   type: typeof UPDATE_RATINGS;
   payload: Ratings;
@@ -97,5 +102,5 @@ interface UpdatePremiumLoadingAction {
   payload: boolean;
 }
 
-export type ActionTypes = UpdateRatingsAction | UpdateQuoteAction
+export type ActionTypes = Reset | UpdateRatingsAction | UpdateQuoteAction
   | UpdatePageLoadingAction | UpdatePremiumLoadingAction;

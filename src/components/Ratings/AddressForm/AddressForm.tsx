@@ -30,12 +30,13 @@ const useStyles = makeStyles(() =>
 interface Props {
   onSubmit(): void;
   handleBack(): void;
+  handleReset(): void;
 }
 
-const AddressForm: React.FC<Props> = ({ handleBack, onSubmit }) => {
+const AddressForm: React.FC<Props> = ({ handleBack, onSubmit, handleReset }) => {
   const { state: { ratings }, dispatch } = React.useContext(Context);
   const { address } = ratings;
-  const { handleSubmit, errors, control } = useForm({ defaultValues: { ...address }, shouldUnregister: false });
+  const { handleSubmit, errors, trigger, control } = useForm({ defaultValues: { ...address }, shouldUnregister: false });
   const classes = useStyles();
 
   return (
@@ -48,6 +49,8 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit }) => {
         <Grid item sm={7}>
           <ControlledTextInput
             control={control}
+            trigger={trigger}
+            autoFocus
             defaultValue={address.line1}
             error={errors?.line1}
             handleChange={(e): void => dispatch({ type: UPDATE_RATINGS, payload: { ...ratings, address: { ...address, line1: e.target.value }} })}
@@ -59,6 +62,7 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit }) => {
         <Grid item sm={5}>
           <ControlledTextInput
             control={control}
+            trigger={trigger}
             defaultValue={address.line2}
             error={errors?.line2}
             handleChange={(e): void => dispatch({ type: UPDATE_RATINGS, payload: { ...ratings, address: { ...address, line2: e.target.value }} })}
@@ -69,6 +73,7 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit }) => {
         <Grid item sm={4}>
           <ControlledTextInput
             control={control}
+            trigger={trigger}
             defaultValue={address.city}
             error={errors?.city}
             handleChange={(e): void => dispatch({ type: UPDATE_RATINGS, payload: { ...ratings, address: { ...address, city: e.target.value }} })}
@@ -80,6 +85,7 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit }) => {
         <Grid item sm={4}>
           <ControlledTextInput
             control={control}
+            trigger={trigger}
             defaultValue={address.region}
             error={errors?.region}
             handleChange={(e): void => dispatch({ type: UPDATE_RATINGS, payload: { ...ratings, address: { ...address, region: e.target.value }} })}
@@ -91,12 +97,19 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit }) => {
         <Grid item sm={4}>
           <ControlledTextInput
             control={control}
+            trigger={trigger}
             defaultValue={address.postal}
             error={errors?.postal}
             handleChange={(e): void => dispatch({ type: UPDATE_RATINGS, payload: { ...ratings, address: { ...address, postal: e.target.value }} })}
             label="Postal"
             name="postal"
-            rules={{ required: "This field is required" }}
+            rules={{
+              required: "This field is required",
+              pattern: {
+                value: /^[0-9]{5}(?:-[0-9]{4})?$/,
+                message: "Not a valid postal",
+              },
+            }}
           />
         </Grid>
         <Grid container spacing={3}>
@@ -104,7 +117,7 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit }) => {
             <Button color="secondary" variant="contained" type="button" onClick={handleBack}>BACK</Button>
           </Grid>
           <Grid className={`${classes.rightButtonContainer} ${classes.buttonContainer}`} item sm={10}>
-            <Button variant="contained" type="button">Reset</Button>
+            <Button variant="contained" type="button" onClick={handleReset}>Reset</Button>
             <Button color="primary" variant="contained" type="submit">Submit</Button>
           </Grid>
         </Grid>
