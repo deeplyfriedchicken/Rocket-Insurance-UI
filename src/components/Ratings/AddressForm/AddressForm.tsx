@@ -89,7 +89,7 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit, handleReset }) => 
             defaultValue={address.region}
             error={errors?.region}
             handleChange={(e): void => dispatch({ type: UPDATE_RATINGS, payload: { ...ratings, address: { ...address, region: e.target.value }} })}
-            label="Region"
+            label="State"
             name="region"
             rules={{ required: "This field is required" }}
           />
