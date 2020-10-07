@@ -46,7 +46,7 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit, handleReset }) => 
       })}
     >
       <Grid className={classes.formContainer} container spacing={3}>
-        <Grid item sm={7}>
+        <Grid item sm={7} xs={12}>
           <ControlledTextInput
             control={control}
             trigger={trigger}
@@ -59,7 +59,7 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit, handleReset }) => 
             rules={{ required: "This field is required" }}
           />
         </Grid>
-        <Grid item sm={5}>
+        <Grid item sm={5} xs={12}>
           <ControlledTextInput
             control={control}
             trigger={trigger}
@@ -70,7 +70,7 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit, handleReset }) => 
             name="line2"
           />
         </Grid>
-        <Grid item sm={4}>
+        <Grid item sm={4} xs={6}>
           <ControlledTextInput
             control={control}
             trigger={trigger}
@@ -82,7 +82,7 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit, handleReset }) => 
             rules={{ required: "This field is required" }}
           />
         </Grid>
-        <Grid item sm={4}>
+        <Grid item sm={4} xs={6}>
           <ControlledTextInput
             control={control}
             trigger={trigger}
@@ -94,7 +94,7 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit, handleReset }) => 
             rules={{ required: "This field is required" }}
           />
         </Grid>
-        <Grid item sm={4}>
+        <Grid item sm={4} xs={12}>
           <ControlledTextInput
             control={control}
             trigger={trigger}
@@ -113,10 +113,10 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit, handleReset }) => 
           />
         </Grid>
         <Grid container spacing={3}>
-          <Grid className={classes.buttonContainer} item sm={2}>
+          <Grid className={classes.buttonContainer} item sm={2} xs={4}>
             <Button color="secondary" variant="contained" type="button" onClick={handleBack}>BACK</Button>
           </Grid>
-          <Grid className={`${classes.rightButtonContainer} ${classes.buttonContainer}`} item sm={10}>
+          <Grid className={`${classes.rightButtonContainer} ${classes.buttonContainer}`} item sm={10} xs={8}>
             <Button variant="contained" type="button" onClick={handleReset}>Reset</Button>
             <Button color="primary" variant="contained" type="submit">Submit</Button>
           </Grid>

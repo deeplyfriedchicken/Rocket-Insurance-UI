@@ -59,7 +59,7 @@ const NameForm: React.FC<Props> = ({ onSubmit }) => {
       })}
     >
       <Grid className={classes.formContainer} container spacing={3}>
-        <Grid item sm={6}>
+        <Grid item sm={6} xs={12}>
           <ControlledTextInput
             autoFocus
             control={control}
@@ -72,7 +72,7 @@ const NameForm: React.FC<Props> = ({ onSubmit }) => {
             rules={{ required: "This field is required" }}
           />
         </Grid>
-        <Grid item sm={6}>
+        <Grid item sm={6} xs={12}>
           <ControlledTextInput
             control={control}
             trigger={trigger}
