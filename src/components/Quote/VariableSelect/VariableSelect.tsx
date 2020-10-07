@@ -25,11 +25,17 @@ const useStyles = makeStyles((theme: Theme) => {
       '&.Mui-focused': {
         color: theme.palette.text.primary,
       },
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '14px',
+      }
     },
     select: {
       fontFamily: spaceMono,
       fontSize: '35px',
       color: '#CB9E2D',
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '20px',
+      }
     },
     menu: {
       '& .MuiMenu-paper': {
