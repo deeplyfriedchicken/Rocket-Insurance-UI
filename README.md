@@ -1,4 +1,4 @@
-# SURE 🚀 Rocket Insurance - FED Coding Challenge ![Rocket Insurance](https://github.com/kcunanan/Rocket-Insurance-UI/workflows/Deploy%20React%20App/badge.svg)
+# SURE 🚀 Rocket Insurance - FED Coding Challenge ![Build Rocket Insurance App](https://github.com/kcunanan/Rocket-Insurance-UI/workflows/Build%20Rocket%20Insurance%20App/badge.svg)
 This was about a `15hr` coding commitment primarily because I decided to add some flair and extra features to it. For reference, I worked on this project from Friday (10/2) to Tuesday(10/6).
 
 ## Links
