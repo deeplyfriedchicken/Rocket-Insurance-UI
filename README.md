@@ -95,6 +95,9 @@ Testing felt like it was out of scope for this initial assignment. Although Type
 ### Error Handling
 The application could also use some more error handling for what to do on bad API responses from the Fetch API.
 
+### Fetch API
+The fetch code could be refactored and cleaned up. Potentially wrap it into a package if multiple sites need to access the same endpoints and structured response.
+
 ### Mobile Responsiveness
 While I added some breakpoint logic for reducing text size and grid layout, I think I could update the UI to make it more engaging for the user.
 
