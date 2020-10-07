@@ -16,16 +16,25 @@ const useStyles = makeStyles((theme: Theme) => {
       fontFamily: spaceMono,
       fontSize: '72px',
       color: theme.palette.secondary.main,
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '62px',
+      },
       '& > span': {
         fontFamily: theme.typography.fontFamily,
         color: theme.palette.text.primary,
         fontSize: '36px',
         fontWeight: 900,
+        [theme.breakpoints.down('xs')]: {
+          fontSize: '24px',
+        }
       },
     },
     premiumSubtitle: {
       fontFamily: spaceMono,
       fontSize: '48px',
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '32px',
+      }
     },
   };
 });
