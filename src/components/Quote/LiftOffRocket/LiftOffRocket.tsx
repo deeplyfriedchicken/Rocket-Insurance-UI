@@ -1,8 +1,10 @@
 import React from 'react';
 
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-import { Backdrop, Slide, Typography } from '@material-ui/core';
+import { Backdrop, Container, Slide, Typography } from '@material-ui/core';
 import Lottie from 'lottie-react-web';
 
 import rocket from '../../../assets/rocket-launch-transparent.json';
@@ -34,6 +36,11 @@ const useStyles = makeStyles((theme: Theme) => {
 
 const LiftOffRocket: React.FC<Props> = ({ loading }) => {
   const classes = useStyles();
+
+  const theme = useTheme();
+  // add breakpoint check to change lottie fixed width on smaller browsers
+  const matches = useMediaQuery(theme.breakpoints.down('xs'));
+
   return (
     <Slide
       direction="down"
@@ -58,17 +65,19 @@ const LiftOffRocket: React.FC<Props> = ({ loading }) => {
               },
             }}
             height={600}
-            width={600}
+            width={matches ? 300 : 600}
             isStopped={false}
             isPaused={false}
           />
-          <Typography
-            className={classes.loadingText}
-            color="textPrimary"
-            variant="h1"
-          >
+          <Container>
+            <Typography
+              className={classes.loadingText}
+              color="textPrimary"
+              variant="h1"
+            >
               performing final checks...
             </Typography>
+          </Container>
         </div>
       </Backdrop>
     </Slide>
