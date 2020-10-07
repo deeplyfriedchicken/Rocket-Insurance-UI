@@ -9,10 +9,12 @@ import { Container } from '@material-ui/core';
 import ContainerLayout from '../Layout/ContainerLayout';
 import ParticlesBackground from '../Common/ParticlesBackground';
 import { Context } from '../../store/Store';
-import { RESET } from '../../store/types';
+import { UPDATE_QUOTE, RESET, Quote } from '../../store/types';
 
 import NameForm from './NameForm/NameForm';
 import AddressForm from './AddressForm/AddressForm';
+
+import api from '../../api';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,7 +41,13 @@ const RatingsPage: React.FC = () => {
   const nodeRef = React.useRef<HTMLDivElement>(null);
   const [page, setPage] = React.useState(0);
   const [isTransitioning, setIsTransitioning] = React.useState(false);
-  const { dispatch } = React.useContext(Context);
+  const { state: { ratings }, dispatch } = React.useContext(Context);
+
+  const retrieveQuote = async (): Promise<Quote | undefined> => {
+    const newQuote = await api.createQuote(ratings);
+    if (newQuote) dispatch({ type: UPDATE_QUOTE, payload: newQuote });
+    return newQuote;
+  }
 
   return (
     <div className={classes.root} style={{ overflow: isTransitioning ? 'hidden' : undefined }}>
@@ -70,7 +78,10 @@ const RatingsPage: React.FC = () => {
                     paragraph="You&apos;ll be able to customize your deductible and asteroid collision after receiving your initial quote!"
                   >
                     <AddressForm
-                      onSubmit={(): void => history.push('/quote')}
+                      onSubmit={async (): Promise<void> => {
+                        await retrieveQuote();
+                        history.push('/quote')
+                      }}
                       handleBack={(): void => setPage(0)}
                       handleReset={(): void => {
                         dispatch({ type: RESET })
