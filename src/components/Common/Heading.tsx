@@ -13,6 +13,10 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: '16px',
       lineHeight: '72px',
       fontWeight: 900,
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '3rem',
+        wordBreak: 'break-word',
+      }
     },
   }),
 );
