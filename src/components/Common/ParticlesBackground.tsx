@@ -14,10 +14,10 @@ const ParticlesBackground: React.FC = () => (
     params={{
       particles: {
           number: {
-              value: 300,
+              value: 200,
               density: {
                   enable: true,
-                  area: 800,
+                  area: 500,
                   factor: 1000,
               }
           },
@@ -27,7 +27,7 @@ const ParticlesBackground: React.FC = () => (
           },
           move: {
               angle: 90,
-              speed: 0.35,
+              speed: 0.5,
               random: true
           },
           size: {
@@ -36,7 +36,7 @@ const ParticlesBackground: React.FC = () => (
           opacity: {
               anim: {
                   enable: true,
-                  speed: 1,
+                  speed: 1.5,
                   opacity_min: 0.05
               }
           }
