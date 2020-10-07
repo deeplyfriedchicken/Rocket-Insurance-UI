@@ -1,4 +1,4 @@
-name: Deploy React App
+name: Build Rocket Insurance App
 
 on:
   push:
