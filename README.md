@@ -1,44 +1,104 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# SURE 🚀 Rocket Insurance - FED Coding Challenge ![Rocket Insurance](https://github.com/kcunanan/Rocket-Insurance-UI/workflows/Deploy%20React%20App/badge.svg)
+This was about a `15hr` coding commitment primarily because I decided to add some flair and extra features to it. For reference, I worked on this project from Friday (10/2) to Tuesday(10/6).
 
-## Available Scripts
+## Links
+---
+* [Install](#install)
+* [Project Config](#project-config)
+* [Deployment](#deployment)
+* [Mockups](#mockups)
+* [What Can Be Improved](#what-can-be-improved)
+* [Summary](#summary)
 
-In the project directory, you can run:
+## Install
+---
 
-### `npm start`
+    git clone https://github.com/kcunanan/Rocket-Insurance-UI.git
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+    npm install
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+    npm run start
+    
+Browser should open up on `rocket.lvh.me:3000`
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Project Config
+---
+The project uses the following modified from a Create React App Project
+* `Typescript` (3.8)
+* `React` (16.13)
+* `Webpack`
+* `ESLint`
 
-### `npm run build`
+The primary libraries used are:
+* `@material-ui/core` - UI Library for Components, Styling, Breakpoints
+* `@material-ui/icons` - Icons (really just the checkmark)
+* `lottie-react-web` - Used for all SVG animations
+* `react-hook-form` - Form validation and state management
+* `react-particles-js` - For the cool particle effect background on the Ratings Page
+* `react-router-dom` - Simple routing between ratings and quote
+* `react-transition-group` - Helps with transitions for Ratings page
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Deployment
+---
+This project deploys automatically to [this S3 bucket endpoint](http://rocket.cunanan.dev.s3-website-us-west-2.amazonaws.com/) on successful pushes to `master`. You can [check recent actions here](https://github.com/kcunanan/Rocket-Insurance-UI/actions).
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Mockups
+---
+I typically feel that I build UI pages better if I have a strong concept of what the page should look like. Using `Figma` [I built out pages](https://www.figma.com/file/HR6byETUe6g6zHdFsFOqwc/SURE-Insurance-FE-Project?node-id=5%3A382) including a Ratings (Name), Ratings (Address), and Quote.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Color Scheme
+Color scheme was based off a satellite image with an interesting color scheme. I felt the palette was vibrant, but had a cool purple color for the primary accent. Purple can convey [mystery](https://www.toptal.com/designers/ux/color-in-ux) and is fitting for some space exploration.
+<div align="center">
+    <img src="./images/satellite.png" />
+    <div>Satellite Image</div>
+    <br/>
+    <img src="./images/theme.png" />
+    <div>Color Scheme from <a target="_blank" href="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F418834834082168677%2F&psig=AOvVaw3QWPnyDRTgTExdFhhE3KIS&ust=1602119313672000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPiZttaloewCFQAAAAAdAAAAABAD">Satellite Image</a></div>
+    <br />
+</div>
 
-### `npm run eject`
+**Ratings (Name Form)**
+<div align="center">
+    <img src="./images/ratings-page-name.png" />
+</div>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**Ratings (Address Form)**
+<div align="center">
+    <img src="./images/ratings-page-address.png" />
+</div>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Quote**
+<div align="center">
+    <img src="./images/quote-page.png" />
+</div>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+<br />
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## What Can Be Improved
+---
+### Testing
+Testing felt like it was out of scope for this initial assignment. Although TypeScript helped a lot in ensuring my app works well, there are a handful of tests I want to tackle [from this issue](https://github.com/kcunanan/Rocket-Insurance-UI/issues/25). Specifically the following:
+* `api` - The fetch API logic could be mocked and tested **especially on errors**
+* [ControlledTextInput](https://github.com/kcunanan/Rocket-Insurance-UI/blob/master/src/components/Common/ControlledTextInput.tsx) - This reusable component is used for reducing code logic on forms and inputs. However, we could test the trigger prop retrieval works and holds state as expected.
+* Ratings Page - Check transitions, buttons, and submit
+  * Form Validation - Add validation test cases
+* Quote Page - Transition works properly
+  * [Premium Component](https://github.com/kcunanan/Rocket-Insurance-UI/blob/master/src/components/Quote/Premium/Premium.tsx) - Renders properly
+  * [Variable Select Component](https://github.com/kcunanan/Rocket-Insurance-UI/blob/master/src/components/Quote/VariableSelect/VariableSelect.tsx) - Renders menu and handles onChange events properly
 
-## Learn More
+### Error Handling
+The application could also use some more error handling for what to do on bad API responses from the Fetch API.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Mobile Responsiveness
+While I added some breakpoint logic for reducing text size and grid layout, I think I could update the UI to make it more engaging for the user.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Accessibility
+Currently the forms are not super accessible for non-mouse users. More use of `tabIndex` and keyboard navigation would help take this site to the next level.
+
+### CI
+Adding tests will let me add CI to the `GitHub Actions Workflow`.
+
+## Summary
+---
+The application was interesting to work on, mostly because I learned a lot about TypeScript (this is the first in depth TypeScript project). I think it showcases what I'm capable of given a few days, and knowing how to build this all will only make me work faster in future projects. I'd love to hear what feedback and improvements can be made to make insurance applications more engaging and usable.
