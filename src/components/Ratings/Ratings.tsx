@@ -73,8 +73,7 @@ const RatingsPage: React.FC = () => {
                 </ContainerLayout>
               ) : (
                   <ContainerLayout
-                    heading="Get Your Boarding Pass:"
-                    subtitle="Almost there!"
+                    heading="Get Your Boarding Pass"
                     paragraph="You&apos;ll be able to customize your deductible and asteroid collision after receiving your initial quote!"
                   >
                     <AddressForm
