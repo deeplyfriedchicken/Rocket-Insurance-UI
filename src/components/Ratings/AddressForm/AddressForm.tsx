@@ -106,7 +106,7 @@ const AddressForm: React.FC<Props> = ({ handleBack, onSubmit, handleReset }) => 
             rules={{
               required: "This field is required",
               pattern: {
-                value: /^[0-9]{5}(?:-[0-9]{4})?$/,
+                value: /^[0-9]{5}$/,
                 message: "Not a valid postal",
               },
             }}
