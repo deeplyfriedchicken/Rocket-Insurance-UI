@@ -1,6 +1,8 @@
 # SURE 🚀 Rocket Insurance - FED Coding Challenge ![Build Rocket Insurance App](https://github.com/kcunanan/Rocket-Insurance-UI/workflows/Build%20Rocket%20Insurance%20App/badge.svg)
 This was about a `15hr` coding commitment primarily because I decided to add some flair and extra features to it. For reference, I worked on this project from Friday (10/2) to Tuesday(10/6).
 
+**Live Link**: http://rocket.cunanan.dev.s3-website-us-west-2.amazonaws.com/
+
 ## Links
 ---
 * [Install](#install)
@@ -18,8 +20,11 @@ This was about a `15hr` coding commitment primarily because I decided to add som
     npm install
 
     npm run start
-    
+
+
 Browser should open up on `rocket.lvh.me:3000`
+
+*Note: You may need to click `Proceed to site` since there's no SSL certificate set up on new environments.*
 
 
 ## Project Config
