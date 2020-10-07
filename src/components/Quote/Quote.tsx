@@ -52,12 +52,6 @@ const QuotePage: React.FC = () => {
   const { deductible, asteroid_collision: asteroidCollision } = quote.variable_options || {};
   const { variable_selections: selections } = quote;
 
-  const retrieveQuote = async (): Promise<Quote | undefined> => {
-    const newQuote = await api.createQuote(ratings);
-    if (newQuote) dispatch({ type: UPDATE_QUOTE, payload: newQuote });
-    return newQuote;
-  }
-
   const updateQuote = async (selections: VariableSelections): Promise<Quote | undefined> => {
     dispatch({ type: UPDATE_PREMIUM_LOADING, payload: true });
     const data = {
@@ -78,8 +72,7 @@ const QuotePage: React.FC = () => {
 
   React.useEffect(() => {
     // redirect if form not filled out
-    if (ratings === initialState.ratings) return history.push('/');
-    retrieveQuote();
+    if (quote === initialState.quote) return history.push('/');
   }, []);
 
   React.useEffect(() => {
