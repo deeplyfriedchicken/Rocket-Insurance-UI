@@ -7,9 +7,9 @@ import Heading from '../Common/Heading';
 
 interface Props {
   className?: string;
-  heading: string;
-  subtitle: string;
-  paragraph: string;
+  heading?: string;
+  subtitle?: string;
+  paragraph?: string;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -46,13 +46,17 @@ const ContainerLayout: React.FC<Props> = ({ className = '', heading, subtitle, p
 
   return (
     <div className={`${className} ${classes.root}`}>
-      <Heading text={heading} />
-      <Typography className={classes.subtitle} variant="subtitle1">
-        {subtitle}
-      </Typography>
-      <Typography className={classes.paragraph} variant="subtitle2">
-        {paragraph}
-      </Typography>
+      {heading ? <Heading text={heading} /> : null}
+      {subtitle ? (
+        <Typography className={classes.subtitle} variant="subtitle1">
+          {subtitle}
+        </Typography>
+      ): null}
+      {paragraph ? (
+        <Typography className={classes.paragraph} variant="subtitle2">
+          {paragraph}
+        </Typography>
+      ) : null}
       {children}
     </div>
   );
