@@ -4,7 +4,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { Container, Typography, Grid } from '@material-ui/core';
+import { Container, Hidden, Typography, Grid } from '@material-ui/core';
 import Lottie from 'lottie-react-web';
 
 import { initialState, Context } from '../../store/Store';
@@ -103,7 +103,7 @@ const QuotePage: React.FC = () => {
             <Grid container spacing={3}>
               <Grid item sm={9}>
                 <Grid container className={classes.selectContainer}>
-                  <Grid item sm={4}>
+                  <Grid item sm={4} xs={6}>
                     <VariableSelect
                       name="deductible"
                       labelText="Deductible"
@@ -114,16 +114,18 @@ const QuotePage: React.FC = () => {
                       }}
                     />
                   </Grid>
-                  <Grid item sm={2}>
-                    <Typography
-                      className={classes.and}
-                      variant="subtitle1"
-                      color="textPrimary"
-                    >
-                      and
-                    </Typography>
-                  </Grid>
-                  <Grid item sm={4}>
+                  <Hidden xsDown>
+                    <Grid item sm={2}>
+                      <Typography
+                        className={classes.and}
+                        variant="subtitle1"
+                        color="textPrimary"
+                      >
+                        and
+                      </Typography>
+                    </Grid>
+                  </Hidden>
+                  <Grid item sm={4} xs={6}>
                     <VariableSelect
                       name="asteroid-collision"
                       labelText="Asteroid Collision"
@@ -137,21 +139,23 @@ const QuotePage: React.FC = () => {
                 </Grid>
                 <Premium premium={quote?.premium} />
               </Grid>
-              <Grid item sm={3}>
-                <Lottie
-                  options={{
-                    animationData: travelingRocket,
-                    rendererSettings: {
-                      preserveAspectRatio: 'xMidYMid slice',
-                    },
-                  }}
-                  height={400}
-                  width={400}
-                  speed={0.5}
-                  isStopped={false}
-                  isPaused={false}
-                />
-              </Grid>
+              <Hidden smDown>
+                <Grid item sm={3}>
+                  <Lottie
+                    options={{
+                      animationData: travelingRocket,
+                      rendererSettings: {
+                        preserveAspectRatio: 'xMidYMid slice',
+                      },
+                    }}
+                    height={400}
+                    width={400}
+                    speed={0.5}
+                    isStopped={false}
+                    isPaused={false}
+                  />
+                </Grid>
+              </Hidden>
             </Grid>
           </ContainerLayout>
         </Container>
