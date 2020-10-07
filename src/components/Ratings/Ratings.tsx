@@ -23,6 +23,12 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       position: 'relative',
+      '& #tsparticles': {
+        zIndex: 1,
+      },
+      '& > .MuiContainer-root': {
+        zIndex: 2,
+      },
     },
   }),
 );
